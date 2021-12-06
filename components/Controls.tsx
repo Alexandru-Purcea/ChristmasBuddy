@@ -25,7 +25,9 @@ export const Controls: React.FC<ControlsProps> = ({ onChange }) => {
             thumbImage={require("../assets/images/star.png")}
             thumbStyle={styles.sliderThumb}
             trackStyle={styles.sliderTrack}
-            onValueChange={(value: number) => onChange("starsAmount", Math.round(value))}
+            onValueChange={(value: number) =>
+              onChange("starsAmount", Math.round(value))
+            }
             minimumValue={0}
             maximumValue={100}
           />
@@ -40,7 +42,7 @@ export const Controls: React.FC<ControlsProps> = ({ onChange }) => {
               { image: require("../assets/images/star.png"), value: "#BFBDB7" },
               { image: require("../assets/images/star.png"), value: "#0C0C0C" },
             ]}
-            onChange={(value) => onChange('starsColor', value)}
+            onChange={(value) => onChange("starsColor", value)}
           />
         </View>
         <View style={styles.controlsGroup}>
@@ -51,7 +53,9 @@ export const Controls: React.FC<ControlsProps> = ({ onChange }) => {
             thumbImage={require("../assets/images/tree-ball.png")}
             thumbStyle={styles.sliderThumb}
             trackStyle={styles.sliderTrack}
-            onValueChange={(value: number) => onChange("ballOrnamentsAmount", Math.round(value))}
+            onValueChange={(value: number) =>
+              onChange("ballOrnamentsAmount", Math.round(value))
+            }
             minimumValue={0}
             maximumValue={100}
           />
@@ -81,7 +85,7 @@ export const Controls: React.FC<ControlsProps> = ({ onChange }) => {
                 value: "#0C0C0C",
               },
             ]}
-            onChange={(value) => onChange('ballOrnamentsColor', value)}
+            onChange={(value) => onChange("ballOrnamentsColor", value)}
           />
         </View>
         <View style={styles.controlsGroup}>
@@ -92,7 +96,9 @@ export const Controls: React.FC<ControlsProps> = ({ onChange }) => {
             thumbImage={require("../assets/images/star.png")}
             thumbStyle={styles.sliderThumb}
             trackStyle={styles.sliderTrack}
-            onValueChange={(value: number) => onChange("lightsAmount", Math.round(value))}
+            onValueChange={(value: number) =>
+              onChange("lightsAmount", Math.round(value))
+            }
             minimumValue={0}
             maximumValue={100}
           />
@@ -145,14 +151,14 @@ const styles = StyleSheet.create({
     marginTop: 25,
     color: "black",
     fontFamily: "rochester-regular",
-    fontSize: 42,
+    fontSize: 36,
     width: "100%",
     textAlign: "center",
   },
   subtitle: {
     color: "black",
     fontFamily: "rochester-regular",
-    fontSize: 52,
+    fontSize: 48,
     width: "100%",
     textAlign: "center",
   },
