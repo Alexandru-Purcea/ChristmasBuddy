@@ -1,9 +1,9 @@
-const GRID_SIZE = 80;
-const GRID_WIDTH = 9;
-const GRID_HEIGHT = 10;
+export const GRID_SIZE = 46;
+export const GRID_WIDTH = 9;
+export const GRID_HEIGHT = 10;
 
+// mapping used to have a map-like grid, inspired from Super Mario game :)
 const B = "background";
-
 //not used yet :D
 const H = "half-grid";
 const G = "full-grid";
@@ -42,6 +42,7 @@ class GridCell extends Cell {
   }
 }
 
+// the game map
 const myGrid = [
   [B, B, B, B, G, B, B, B, B],
   [B, B, B, G, G, G, B, B, B],
