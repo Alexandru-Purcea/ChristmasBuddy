@@ -6,7 +6,7 @@ import {
   ImageBackground,
   SafeAreaView,
 } from "react-native";
-import { Controls } from "../components/Controls";
+import { Controls, Tree } from "../components";
 
 import { RootStackScreenProps } from "../types";
 
@@ -22,7 +22,9 @@ export default function HomeScreen({
       style={styles.image}
     >
       <View style={styles.container}>
-        <View style={{ flex: 1 }} />
+        <View style={{ flex: 1 }}>
+          <Tree />
+        </View>
         <Controls />
       </View>
     </ImageBackground>
@@ -38,6 +40,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    flexDirection: "row"
+    flexDirection: "row",
   },
 });

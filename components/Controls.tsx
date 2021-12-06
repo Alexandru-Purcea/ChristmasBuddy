@@ -32,21 +32,21 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   group: {
-    width: '100%',
+    width: "100%",
   },
   title: {
     marginTop: 25,
     color: "black",
     fontFamily: "rochester-regular",
-    fontSize: 52,
-    width: '100%',
-    textAlign: 'center'
+    fontSize: 36,
+    width: "100%",
+    textAlign: "center",
   },
   subtitle: {
     color: "black",
     fontFamily: "rochester-regular",
-    fontSize: 62,
-    width: '100%',
-    textAlign: 'center'
+    fontSize: 48,
+    width: "100%",
+    textAlign: "center",
   },
 });
