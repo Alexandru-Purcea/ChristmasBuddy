@@ -1,15 +1,11 @@
 import React, { useRef } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import TreeGrid from "../services/grid";
+import TreeGrid, { GRID_HEIGHT, GRID_SIZE, GRID_WIDTH } from "../services/grid";
 import ChristmasTree from "./graphic/christmasTree";
 import TreeStar from "./graphic/treeStar";
 import TreeBall from "./graphic/treeBall";
 
-const GRID_SIZE = 46;
-const GRID_WIDTH = 9;
-const GRID_HEIGHT = 10;
-
-export function Tree({ debug = false, numberOfStars = 0, numberOfBalls = 5 }) {
+export function Tree({ debug = false, numberOfStars = 5, numberOfBalls = 5 }) {
   const treeGrid = useRef(TreeGrid);
 
   const renderTree = () => {
@@ -30,7 +26,7 @@ export function Tree({ debug = false, numberOfStars = 0, numberOfBalls = 5 }) {
       <View style={styles.gridContainer}>
         {arr.map((row, y) => (
           <View key={y} style={styles.gridRow}>
-            {row.map((col, x) => (
+            {row.map((_col, x) => (
               <View
                 key={x}
                 style={[styles.gridCell, debug && styles.showDebugGrid]}
