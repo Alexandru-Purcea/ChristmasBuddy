@@ -1,14 +1,12 @@
 import * as React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import LottieView from "lottie-react-native";
 
-import EditScreenInfo from "../components/EditScreenInfo";
-import { Text, View } from "../components/Themed";
-import { RootTabScreenProps } from "../types";
+import { RootStackScreenProps } from "../types";
 
-export default function TabOneScreen({
+export default function HomeScreen({
   navigation,
-}: RootTabScreenProps<"TabOne">) {
+}: RootStackScreenProps<"Root">) {
   return (
     <View style={styles.container}>
       <LottieView
@@ -35,10 +33,5 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
   },
 });
