@@ -1,4 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
+import * as ScreenOrientation from 'expo-screen-orientation';
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
