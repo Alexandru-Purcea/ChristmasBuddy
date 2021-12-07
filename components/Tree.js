@@ -5,12 +5,27 @@ import ChristmasTree from "./graphic/christmasTree";
 import TreeStar from "./graphic/treeStar";
 import TreeBall from "./graphic/treeBall";
 
-export function Tree({ debug = false, numberOfStars = 5, numberOfBalls = 5 }) {
+const ballColorMapper = [
+  'rgba(157, 26, 50, 1)',
+  'rgba(60, 142, 107, 1)',
+  'rgba(207, 98, 47, 1)',
+  'rgba(245, 202, 79, 1)',
+  'rgba(191, 189, 183, 1)',
+  'rgba(12, 12, 12, 1)',
+];
+
+const starColorMapper = [
+  '#F5CA4F',
+  '#E28045',
+  '#ecabf7'
+];
+
+export function Tree({ debug = false, numberOfStars = 10, numberOfBalls = 10 }) {
   const treeGrid = useRef(TreeGrid);
 
   const renderTree = useCallback(() => {
-    // refresh before rerender
-    treeGrid.current.refresh()
+    // clean before rerender
+    treeGrid.current.clean()
     const arr = Array(GRID_HEIGHT)
       .fill()
       .map(() => Array(GRID_WIDTH).fill());
@@ -18,13 +33,15 @@ export function Tree({ debug = false, numberOfStars = 5, numberOfBalls = 5 }) {
     for (let index = 0; index < numberOfStars; index++) {
       const nextCell = treeGrid.current.nextRandomFreeCell;
       const rotation = Math.floor(Math.random() * 30 - 60);
-      nextCell.markOccupied(<TreeStar rotation={rotation} />);
+      const starColor = Math.floor(Math.random() * starColorMapper.length);
+      nextCell.markOccupied(<TreeStar rotation={rotation} color={starColorMapper[starColor]}/>);
     }
 
     for (let index = 0; index < numberOfBalls; index++) {
       const nextCell = treeGrid.current.nextRandomFreeCell;
       const rotation = Math.floor(Math.random() * 30-30);
-      nextCell.markOccupied(<TreeBall rotation={rotation} />);
+      const ballColor = Math.floor(Math.random() * ballColorMapper.length);
+      nextCell.markOccupied(<TreeBall rotation={rotation} color={ballColorMapper[ballColor]} />);
     }
     return (
       <View style={styles.gridContainer}>

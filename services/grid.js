@@ -21,6 +21,11 @@ class Cell {
     element && (this.element = element);
   }
 
+  clean() {
+    this.isOccupied = false;
+    this.element = null;
+  }
+
   get anchorPoint() {
     // this will return the center of the grid cell
     return {
@@ -59,10 +64,11 @@ const myGrid = [
 class Grid {
   constructor(grid) {
     this.templateGrid = grid;
-    this.refresh();
+    this.occupiedCells = [];
+    this.init();
   }
 
-  refresh() {
+  init() {
     const generatedGrid = [];
     for (let y = 0; y < GRID_HEIGHT; y++) {
       for (let x = 0; x < GRID_WIDTH; x++) {
@@ -82,6 +88,12 @@ class Grid {
     this.grid = generatedGrid;
   }
 
+  clean() {
+    this.occupiedCells.forEach(cell => cell.clean());
+    this.occupiedCells.splice(0);
+  }
+
+  //
   gridCell(x, y) {
     return this.grid[y * GRID_WIDTH + x];
   }
@@ -93,7 +105,9 @@ class Grid {
         "Gata cu impodobitul bradului, nu mai este nici un loc liber"
       );
     }
-    return unoccupiedGrid[Math.floor(Math.random() * unoccupiedGrid.length)];
+    const unoccupiedCell = unoccupiedGrid[Math.floor(Math.random() * unoccupiedGrid.length)];
+    this.occupiedCells.push(unoccupiedCell);
+    return unoccupiedCell;
   }
 }
 
