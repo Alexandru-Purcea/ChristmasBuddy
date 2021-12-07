@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useCallback, useRef } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import TreeGrid, { GRID_HEIGHT, GRID_SIZE, GRID_WIDTH } from "../services/grid";
 import ChristmasTree from "./graphic/christmasTree";
@@ -8,19 +8,23 @@ import TreeBall from "./graphic/treeBall";
 export function Tree({ debug = false, numberOfStars = 5, numberOfBalls = 5 }) {
   const treeGrid = useRef(TreeGrid);
 
-  const renderTree = () => {
+  const renderTree = useCallback(() => {
+    // refresh before rerender
+    treeGrid.current.refresh()
     const arr = Array(GRID_HEIGHT)
       .fill()
       .map(() => Array(GRID_WIDTH).fill());
 
     for (let index = 0; index < numberOfStars; index++) {
       const nextCell = treeGrid.current.nextRandomFreeCell;
-      nextCell.markOccupied(<TreeStar />);
+      const rotation = Math.floor(Math.random() * 30 - 60);
+      nextCell.markOccupied(<TreeStar rotation={rotation} />);
     }
 
     for (let index = 0; index < numberOfBalls; index++) {
       const nextCell = treeGrid.current.nextRandomFreeCell;
-      nextCell.markOccupied(<TreeBall />);
+      const rotation = Math.floor(Math.random() * 30-30);
+      nextCell.markOccupied(<TreeBall rotation={rotation} />);
     }
     return (
       <View style={styles.gridContainer}>
@@ -48,11 +52,12 @@ export function Tree({ debug = false, numberOfStars = 5, numberOfBalls = 5 }) {
         ))}
       </View>
     );
-  };
+  }, [treeGrid]);
+
   return (
     <View style={styles.container}>
       <ChristmasTree style={styles.christmasTree} />
-      {renderTree(TreeGrid)}
+      {renderTree()}
     </View>
   );
 }
