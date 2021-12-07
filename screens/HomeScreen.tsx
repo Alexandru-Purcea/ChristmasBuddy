@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import { StyleSheet, View, ImageBackground, Animated } from "react-native";
 import LottieView from "lottie-react-native";
 import { Controls, Tree } from "../components";
+import Presents from "../components/Presents";
 
 import { RootStackScreenProps } from "../types";
 
@@ -58,13 +59,17 @@ export default function HomeScreen({
     }
   };
 
+  const [isSnowing, setIsSnowing] = React.useState(false);
+  const makeItSnow = () => {
+    setIsSnowing(true);
+  };
   return (
     <ImageBackground
       source={backgroundImage}
       resizeMode="cover"
       style={styles.image}
     >
-      <View style={styles.container}>
+      <View style={styles.container} onTouchStart={makeItSnow}>
         <View style={{ flex: 1 }}>
           <Animated.View style={{ ...styles.santa, opacity: fadeAnim }}>
             <LottieView
@@ -83,6 +88,7 @@ export default function HomeScreen({
             starsColor={starsColor}
             numberOfLights={lightsAmount}
           />
+          <Presents isRunning={isSnowing} />
         </View>
         <Controls onChange={onChange} />
       </View>
