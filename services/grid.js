@@ -58,10 +58,15 @@ const myGrid = [
 
 class Grid {
   constructor(grid) {
+    this.templateGrid = grid;
+    this.refresh();
+  }
+
+  refresh() {
     const generatedGrid = [];
     for (let y = 0; y < GRID_HEIGHT; y++) {
       for (let x = 0; x < GRID_WIDTH; x++) {
-        const pos = grid[y][x];
+        const pos = this.templateGrid[y][x];
         switch (pos) {
           case B:
             generatedGrid.push(new BackgroundCell(x, y));
