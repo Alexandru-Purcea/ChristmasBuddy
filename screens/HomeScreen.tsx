@@ -15,6 +15,10 @@ const backgroundImage = require("../assets/images/blured-background.png");
 export default function HomeScreen({
   navigation,
 }: RootStackScreenProps<"Root">) {
+  const onChange = (field: string, value: string | number) => {
+    console.log(field);
+    console.log(value);
+  };
   return (
     <ImageBackground
       source={backgroundImage}
@@ -23,7 +27,7 @@ export default function HomeScreen({
     >
       <View style={styles.container}>
         <View style={{ flex: 1 }} />
-        <Controls />
+        <Controls onChange={onChange} />
       </View>
     </ImageBackground>
   );
