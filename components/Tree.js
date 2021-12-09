@@ -1,52 +1,124 @@
-import React, { useCallback, useRef } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useState, useRef, useEffect } from "react";
+import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import TreeGrid, { GRID_HEIGHT, GRID_SIZE, GRID_WIDTH } from "../services/grid";
 import ChristmasTree from "./graphic/christmasTree";
+import ChristmasTreeStar from "./graphic/christmasTreeStar";
 import TreeStar from "./graphic/treeStar";
 import TreeBall from "./graphic/treeBall";
+import { Audio } from "expo-av";
 
-const ballColorMapper = [
-  'rgba(157, 26, 50, 1)',
-  'rgba(60, 142, 107, 1)',
-  'rgba(207, 98, 47, 1)',
-  'rgba(245, 202, 79, 1)',
-  'rgba(191, 189, 183, 1)',
-  'rgba(12, 12, 12, 1)',
-];
+function usePrevious(value) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+}
 
-const starColorMapper = [
-  '#F5CA4F',
-  '#E28045',
-  '#ecabf7'
-];
-
-export function Tree({ debug = false, numberOfStars = 10, numberOfBalls = 10 }) {
+export function Tree({
+  debug = false,
+  numberOfStars,
+  numberOfBalls,
+  starsColor,
+  ballOrnamentsColor,
+}) {
   const treeGrid = useRef(TreeGrid);
+  const [activeChristmasTreeStar, setActiveChristmasTreeStar] = useState(false);
+  const [sound, setSound] = React.useState();
 
-  const renderTree = useCallback(() => {
-    // clean before rerender
-    treeGrid.current.clean()
+  async function playSound() {
+    const { sound } = await Audio.Sound.createAsync(
+      require("../assets/audio/christmasSong.mp3")
+    );
+    setSound(sound);
+
+    console.log("Playing Sound");
+    await sound.playAsync();
+  }
+
+  React.useEffect(() => {
+    return sound
+      ? () => {
+          console.log("Unloading Sound");
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
+
+  handleChristmasTreeStarTap = async () => {
+    console.log("TAP");
+    if (!activeChristmasTreeStar) {
+      playSound();
+      setActiveChristmasTreeStar(true);
+      return;
+    }
+
+    await sound.pauseAsync();
+    setActiveChristmasTreeStar(false);
+  };
+
+  const renderTree = () => {
+    const prevNumberOfStars = usePrevious(numberOfStars);
+    const prevNumberOfBalls = usePrevious(numberOfBalls);
+
     const arr = Array(GRID_HEIGHT)
       .fill()
       .map(() => Array(GRID_WIDTH).fill());
 
-    for (let index = 0; index < numberOfStars; index++) {
+    if (prevNumberOfStars < numberOfStars) {
       const nextCell = treeGrid.current.nextRandomFreeCell;
-      const rotation = Math.floor(Math.random() * 30 - 60);
-      const starColor = Math.floor(Math.random() * starColorMapper.length);
-      nextCell.markOccupied(<TreeStar rotation={rotation} color={starColorMapper[starColor]}/>);
+      if (nextCell) {
+        const rotation = Math.floor(Math.random() * 30 - 15);
+        nextCell.markOccupied(
+          <TreeStar rotation={rotation} color={starsColor} />,
+          "star"
+        );
+      }
     }
 
-    for (let index = 0; index < numberOfBalls; index++) {
-      const nextCell = treeGrid.current.nextRandomFreeCell;
-      const rotation = Math.floor(Math.random() * 30-30);
-      const ballColor = Math.floor(Math.random() * ballColorMapper.length);
-      nextCell.markOccupied(<TreeBall rotation={rotation} color={ballColorMapper[ballColor]} />);
+    if (prevNumberOfStars > numberOfStars) {
+      const occupiedCellWithType = treeGrid.current.occupiedCellWithType(
+        "star"
+      );
+      if (!occupiedCellWithType) {
+        return;
+      }
+
+      occupiedCellWithType.clean();
     }
+
+    if (prevNumberOfBalls < numberOfBalls) {
+      const nextCell = treeGrid.current.nextRandomFreeCell;
+      if (nextCell) {
+        const rotation = Math.floor(Math.random() * 30 - 20);
+        nextCell.markOccupied(
+          <TreeBall rotation={rotation} color={ballOrnamentsColor} />,
+          "ballDecoration"
+        );
+      }
+    }
+
+    if (prevNumberOfBalls > numberOfBalls) {
+      const occupiedCellWithType = treeGrid.current.occupiedCellWithType(
+        "ballDecoration"
+      );
+      if (!occupiedCellWithType) {
+        return;
+      }
+
+      occupiedCellWithType.clean();
+    }
+
     return (
       <View style={styles.gridContainer}>
         {arr.map((row, y) => (
-          <View key={y} style={styles.gridRow}>
+          <View
+            key={y}
+            style={{
+              ...styles.gridRow,
+              marginLeft: y % 2 === 1 ? GRID_SIZE / 2 : 0,
+            }}
+          >
             {row.map((_col, x) => (
               <View
                 key={x}
@@ -69,11 +141,23 @@ export function Tree({ debug = false, numberOfStars = 10, numberOfBalls = 10 }) 
         ))}
       </View>
     );
-  }, [treeGrid]);
+  };
 
   return (
     <View style={styles.container}>
       <ChristmasTree style={styles.christmasTree} />
+      <TouchableWithoutFeedback
+        style={styles.christmasTreeStar}
+        onPress={handleChristmasTreeStarTap}
+      >
+        <ChristmasTreeStar
+          style={{
+            ...styles.christmasTreeStar,
+            shadowOpacity: activeChristmasTreeStar ? 1 : 0,
+          }}
+          isActive={activeChristmasTreeStar}
+        />
+      </TouchableWithoutFeedback>
       {renderTree()}
     </View>
   );
@@ -89,9 +173,17 @@ const styles = StyleSheet.create({
     bottom: 40,
     position: "absolute",
   },
-  gridContainer: {
+  christmasTreeStar: {
+    zIndex: 2,
+    bottom: 640,
     position: "absolute",
-    bottom: 160,
+    shadowColor: "#F5CA4F",
+    shadowRadius: 10,
+  },
+  gridContainer: {
+    zIndex: 1,
+    position: "absolute",
+    bottom: 220,
     width: GRID_WIDTH * GRID_SIZE,
     height: GRID_HEIGHT * GRID_SIZE,
   },

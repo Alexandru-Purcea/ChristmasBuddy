@@ -9,20 +9,23 @@ const H = "half-grid";
 const G = "full-grid";
 
 class Cell {
-  constructor({ x, y, isOccupied }) {
+  constructor({ x, y, isOccupied, type }) {
     this.isOccupied = isOccupied;
+    this.type = type;
     this.x = x;
     this.y = y;
     this.element = null;
   }
 
-  markOccupied(element) {
+  markOccupied(element, type) {
     this.isOccupied = true;
+    this.type = type;
     element && (this.element = element);
   }
 
   clean() {
     this.isOccupied = false;
+    this.type = "";
     this.element = null;
   }
 
@@ -50,15 +53,15 @@ class GridCell extends Cell {
 // the game map
 const myGrid = [
   [B, B, B, B, G, B, B, B, B],
+  [B, B, B, G, G, B, B, B, B],
   [B, B, B, G, G, G, B, B, B],
-  [B, B, B, G, G, G, B, B, B],
+  [B, B, G, G, G, G, B, B, B],
   [B, B, G, G, G, G, G, B, B],
+  [B, B, G, G, G, G, B, B, B],
   [B, B, G, G, G, G, G, B, B],
-  [B, B, G, G, G, G, G, B, B],
+  [B, G, G, G, G, G, G, B, B],
   [B, G, G, G, G, G, G, G, B],
-  [B, B, G, G, G, G, G, B, B],
-  [G, G, G, G, G, G, G, G, G],
-  [G, G, G, G, G, G, G, G, G],
+  [G, G, G, G, G, G, G, G, B],
 ];
 
 class Grid {
@@ -89,7 +92,7 @@ class Grid {
   }
 
   clean() {
-    this.occupiedCells.forEach(cell => cell.clean());
+    this.occupiedCells.forEach((cell) => cell.clean());
     this.occupiedCells.splice(0);
   }
 
@@ -101,13 +104,33 @@ class Grid {
   get nextRandomFreeCell() {
     const unoccupiedGrid = this.grid.filter((cell) => !cell.isOccupied);
     if (unoccupiedGrid.length === 0) {
-      throw new Error(
-        "Gata cu impodobitul bradului, nu mai este nici un loc liber"
-      );
+      // throw new Error(
+      //   "Gata cu impodobitul bradului, nu mai este nici un loc liber"
+      // );
+      return null;
     }
-    const unoccupiedCell = unoccupiedGrid[Math.floor(Math.random() * unoccupiedGrid.length)];
+    const unoccupiedCell =
+      unoccupiedGrid[Math.floor(Math.random() * unoccupiedGrid.length)];
     this.occupiedCells.push(unoccupiedCell);
     return unoccupiedCell;
+  }
+
+  get occupiedCellWithType() {
+    return (type) => {
+      const occupiedGridWithType = this.grid.filter(
+        (cell) => cell.type === type
+      );
+
+      if(!this.occupiedCellWithType) {
+        return null;
+      }
+
+      const occupiedCell =
+        occupiedGridWithType[
+          Math.floor(Math.random() * occupiedGridWithType.length)
+        ];
+      return occupiedCell;
+    };
   }
 }
 
