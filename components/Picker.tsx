@@ -17,7 +17,7 @@ interface PickerProps {
 }
 
 export const Picker: React.FC<PickerProps> = ({ elements, onChange }) => {
-  const [activeElement, setActiveElement] = useState(-1);
+  const [activeElement, setActiveElement] = useState(0);
 
   const onPress = (e: PickerElement, i: number) => {
     setActiveElement(i);
