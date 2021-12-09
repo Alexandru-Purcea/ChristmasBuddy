@@ -47,7 +47,7 @@ const TreeStar: React.FC<TreeStarProps> = ({
   const style = {
     shadowColor: color,
     shadowRadius: 10,
-    shadowOpacity: 0.7,
+    shadowOpacity: 0.4,
   };
 
   return (

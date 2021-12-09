@@ -44,7 +44,7 @@ const TreeBall: React.FC<TreeBallProps> = ({
   const style = {
     shadowColor: color,
     shadowRadius: 10,
-    shadowOpacity: 0.7,
+    shadowOpacity: 0.4,
   };
   return (
     <Animated.View

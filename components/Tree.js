@@ -28,6 +28,8 @@ export function Tree({
   numberOfLights,
   starsColor,
   ballOrnamentsColor,
+  displaySanta,
+  hideSanta
 }) {
   const treeGrid = useRef(TreeGrid);
   const lightsGrid = useRef(LightsGrid);
@@ -55,11 +57,13 @@ export function Tree({
     if (!activeChristmasTreeStar) {
       playSound();
       setActiveChristmasTreeStar(true);
+      displaySanta()
       return;
     }
 
     await sound.pauseAsync();
     setActiveChristmasTreeStar(false);
+    hideSanta()
   };
 
   const renderTree = () => {
