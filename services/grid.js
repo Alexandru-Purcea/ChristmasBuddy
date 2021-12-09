@@ -95,19 +95,34 @@ class Grid {
 
   //
   gridCell(x, y) {
+    if ( x < 0 || y < 0) {
+      return;
+    }
     return this.grid[y * GRID_WIDTH + x];
+  }
+
+  isAllAlone(cell) {
+    const {x, y} = cell;
+    let isAlone = !this.gridCell(x-1, y)?.isOccupied;
+    isAlone ||= !this.gridCell(x+1, y)?.isOccupied;
+    isAlone ||= !this.gridCell(x, y-1)?.isOccupied;
+    isAlone ||= !this.gridCell(x, y+1)?.isOccupied;
+    return isAlone; 
   }
 
   get nextRandomFreeCell() {
     const unoccupiedGrid = this.grid.filter((cell) => !cell.isOccupied);
+    const unoccupiedCell = unoccupiedGrid[Math.floor(Math.random() * unoccupiedGrid.length)];
     if (unoccupiedGrid.length === 0) {
       throw new Error(
         "Gata cu impodobitul bradului, nu mai este nici un loc liber"
       );
+    } else if (unoccupiedGrid.length / this.grid.length < 30 && !this.isAllAlone(unoccupiedCell)) {
+      return this.nextRandomFreeCell;
+    } else {
+      this.occupiedCells.push(unoccupiedCell);
+      return unoccupiedCell;
     }
-    const unoccupiedCell = unoccupiedGrid[Math.floor(Math.random() * unoccupiedGrid.length)];
-    this.occupiedCells.push(unoccupiedCell);
-    return unoccupiedCell;
   }
 }
 
