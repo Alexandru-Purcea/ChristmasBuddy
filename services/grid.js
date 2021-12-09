@@ -99,27 +99,50 @@ class Grid {
 
   //
   gridCell(x, y) {
-    if ( x < 0 || y < 0) {
+    if (x < 0 || y < 0) {
       return;
     }
     return this.grid[y * GRID_WIDTH + x];
   }
 
-  isAllAlone(cell) {
-    const {x, y} = cell;
-    let isAlone = !this.gridCell(x-1, y)?.isOccupied;
-    isAlone ||= !this.gridCell(x+1, y)?.isOccupied;
-    isAlone ||= !this.gridCell(x, y-1)?.isOccupied;
-    isAlone ||= !this.gridCell(x, y+1)?.isOccupied;
-    return isAlone; 
+  isAllAlone(cell, bothAxes) {
+    const { x, y } = cell;
+    let isAloneHorizontally =
+      (!this.gridCell(x - 1, y)?.isOccupied ||
+        !this.gridCell(x - 1, y)?.isEnabled) &&
+      (!this.gridCell(x + 1, y)?.isOccupied ||
+        !this.gridCell(x + 1, y)?.isEnabled);
+
+    let isAloneVertically =
+      (!this.gridCell(x, y - 1)?.isOccupied ||
+        !this.gridCell(x, y - 1)?.isEnabled) &&
+      (!this.gridCell(x, y + 1)?.isOccupied ||
+        !this.gridCell(x, y + 1)?.isEnabled);
+
+    return bothAxes
+      ? isAloneHorizontally && isAloneVertically
+      : isAloneHorizontally;
   }
 
   get nextRandomFreeCell() {
+    const availableGrid = this.grid.filter((cell) => cell.isEnabled);
     const unoccupiedGrid = this.grid.filter((cell) => !cell.isOccupied);
-    const unoccupiedCell = unoccupiedGrid[Math.floor(Math.random() * unoccupiedGrid.length)];
+    const unoccupiedCell =
+      unoccupiedGrid[Math.floor(Math.random() * unoccupiedGrid.length)];
+
+    console.log(availableGrid.length / unoccupiedGrid.length);
+
     if (unoccupiedGrid.length === 0) {
       return null;
-    } else if (unoccupiedGrid.length / this.grid.length < 30 && !this.isAllAlone(unoccupiedCell)) {
+    } else if (
+      availableGrid.length / unoccupiedGrid.length < 1.2 &&
+      !this.isAllAlone(unoccupiedCell, true)
+    ) {
+      return this.nextRandomFreeCell;
+    } else if (
+      availableGrid.length / unoccupiedGrid.length < 1.3 &&
+      !this.isAllAlone(unoccupiedCell, false)
+    ) {
       return this.nextRandomFreeCell;
     } else {
       this.occupiedCells.push(unoccupiedCell);
@@ -133,7 +156,7 @@ class Grid {
         (cell) => cell.type === type && cell.isEnabled
       );
 
-      if(!this.occupiedCellWithType) {
+      if (!this.occupiedCellWithType) {
         return null;
       }
 

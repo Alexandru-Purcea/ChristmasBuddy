@@ -48,24 +48,24 @@ class GridCell extends Cell {
 
 // the game map
 const myGrid = [
-[B, B, B, B, B, B, B, B, B, G, B, B, B, B, B, B, B, B, B],
-[B, B, B, B, B, B, B, B, G, G, B, B, B, B, B, B, B, B, B],
-[B, B, B, B, B, B, B, B, G, B, G, B, B, B, B, B, B, B, B],
-[B, B, B, B, B, B, B, G, B, G, B, G, B, B, B, B, B, B, B],
-[B, B, B, B, B, B, B, B, G, B, G, B, B, B, B, B, B, B, B],
-[B, B, B, B, B, B, B, G, B, G, B, G, B, B, B, B, B, B, B],
-[B, B, B, B, B, B, G, B, G, B, G, B, G, B, B, B, B, B, B],
-[B, B, B, B, B, G, B, G, B, G, B, G, B, B, B, B, B, B, B],
-[B, B, B, B, B, B, G, B, G, B, G, B, G, G, B, B, B, B, B],
-[B, B, B, B, B, G, B, G, B, G, B, G, B, B, B, B, B, B, B],
-[B, B, B, B, B, G, G, B, G, B, G, B, G, G, B, B, B, B, B],
-[B, B, B, B, G, G, B, G, B, G, B, G, B, G, B, B, B, B, B],
-[B, B, B, B, G, B, G, B, G, B, G, B, G, B, G, B, B, B, B],
-[B, B, B, B, B, G, B, G, B, G, B, G, B, G, B, B, B, B, B],
-[B, B, B, G, G, B, G, B, G, B, G, B, G, B, G, G, B, B, B],
-[B, G, B, G, B, G, B, G, B, G, B, G, B, G, B, B, G, B, B],
-[B, G, G, B, G, B, G, B, G, B, G, B, G, B, G, G, B, B, B],
-[B, G, B, G, B, G, B, G, B, G, B, G, B, G, B, B, G, B, B],
+  [B, B, B, B, B, B, B, B, B, G, B, B, B, B, B, B, B, B, B],
+  [B, B, B, B, B, B, B, B, G, G, B, B, B, B, B, B, B, B, B],
+  [B, B, B, B, B, B, B, B, G, B, G, B, B, B, B, B, B, B, B],
+  [B, B, B, B, B, B, B, G, B, G, B, G, B, B, B, B, B, B, B],
+  [B, B, B, B, B, B, B, B, G, B, G, B, B, B, B, B, B, B, B],
+  [B, B, B, B, B, B, B, G, B, G, B, G, B, B, B, B, B, B, B],
+  [B, B, B, B, B, B, G, B, G, B, G, B, G, B, B, B, B, B, B],
+  [B, B, B, B, B, G, B, G, B, G, B, G, B, B, B, B, B, B, B],
+  [B, B, B, B, B, B, G, B, G, B, G, B, G, G, B, B, B, B, B],
+  [B, B, B, B, B, G, B, G, B, G, B, G, B, B, B, B, B, B, B],
+  [B, B, B, B, B, G, G, B, G, B, G, B, G, G, B, B, B, B, B],
+  [B, B, B, B, G, G, B, G, B, G, B, G, B, G, B, B, B, B, B],
+  [B, B, B, B, G, B, G, B, G, B, G, B, G, B, G, B, B, B, B],
+  [B, B, B, B, B, G, B, G, B, G, B, G, B, G, B, B, B, B, B],
+  [B, B, B, G, G, B, G, B, G, B, G, B, G, B, G, G, B, B, B],
+  [B, G, B, G, B, G, B, G, B, G, B, G, B, G, B, B, G, B, B],
+  [B, G, G, B, G, B, G, B, G, B, G, B, G, B, G, G, B, B, B],
+  [B, G, B, G, B, G, B, G, B, G, B, G, B, G, B, B, G, B, B],
 ];
 
 class Grid {
@@ -104,20 +104,55 @@ class Grid {
   gridCell(x, y) {
     return this.grid[y * LIGHTS_GRID_WIDTH + x];
   }
+  isAllAlone(cell, bothAxes) {
+    const { x, y } = cell;
+    let isAloneHorizontally =
+      (!this.gridCell(x - 1, y)?.isOccupied ||
+        !this.gridCell(x - 1, y)?.isEnabled) &&
+      (!this.gridCell(x + 1, y)?.isOccupied ||
+        !this.gridCell(x + 1, y)?.isEnabled);
+
+    let isAloneVertically =
+      (!this.gridCell(x, y - 1)?.isOccupied ||
+        !this.gridCell(x, y - 1)?.isEnabled) &&
+      (!this.gridCell(x, y + 1)?.isOccupied ||
+        !this.gridCell(x, y + 1)?.isEnabled);
+
+    return bothAxes
+      ? isAloneHorizontally && isAloneVertically
+      : isAloneHorizontally;
+  }
 
   get nextRandomFreeCell() {
+    const availableGrid = this.grid.filter((cell) => cell.isEnabled);
     const unoccupiedGrid = this.grid.filter((cell) => !cell.isOccupied);
-    if (unoccupiedGrid.length === 0) {
-      return null;
-    }
     const unoccupiedCell =
       unoccupiedGrid[Math.floor(Math.random() * unoccupiedGrid.length)];
-    this.occupiedCells.push(unoccupiedCell);
-    return unoccupiedCell;
+
+    console.log(availableGrid.length / unoccupiedGrid.length);
+
+    if (unoccupiedGrid.length === 0) {
+      return null;
+    } else if (
+      availableGrid.length / unoccupiedGrid.length < 1.2 &&
+      !this.isAllAlone(unoccupiedCell, true)
+    ) {
+      return this.nextRandomFreeCell;
+    } else if (
+      availableGrid.length / unoccupiedGrid.length < 1.3 &&
+      !this.isAllAlone(unoccupiedCell, false)
+    ) {
+      return this.nextRandomFreeCell;
+    } else {
+      this.occupiedCells.push(unoccupiedCell);
+      return unoccupiedCell;
+    }
   }
 
   get randomOccupiedCell() {
-    const occupiedCells = this.grid.filter((cell) => cell.isOccupied && cell.isEnabled);
+    const occupiedCells = this.grid.filter(
+      (cell) => cell.isOccupied && cell.isEnabled
+    );
 
     if (!occupiedCells?.length) {
       return null;
