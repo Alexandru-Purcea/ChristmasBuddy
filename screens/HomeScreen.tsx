@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -15,10 +15,37 @@ const backgroundImage = require("../assets/images/blured-background.png");
 export default function HomeScreen({
   navigation,
 }: RootStackScreenProps<"Root">) {
+  const [ballOrnamentsAmount, setBallOrnamentsAmount] = useState(0);
+  const [starsAmount, setStarsAmount] = useState(0);
+  const [lightsAmount, setLightsAmount] = useState(0);
+  const [starsColor, setStarsColor] = useState("#F5CA4F");
+  const [ballOrnamentsColor, setBallOrnamentsColor] = useState("#F5CA4F");
+
   const onChange = (field: string, value: string | number) => {
-    console.log(field);
-    console.log(value);
+    switch (field) {
+      case "ballOrnamentsAmount": {
+        setBallOrnamentsAmount(value);
+        break;
+      }
+      case "starsAmount": {
+        setStarsAmount(value);
+        break;
+      }
+      case "lightsAmount": {
+        setLightsAmount(value);
+        break;
+      }
+      case "starsColor": {
+        setStarsColor(value);
+        break;
+      }
+      case "ballOrnamentsColor": {
+        setBallOrnamentsColor(value);
+        break;
+      }
+    }
   };
+
   return (
     <ImageBackground
       source={backgroundImage}
@@ -27,9 +54,17 @@ export default function HomeScreen({
     >
       <View style={styles.container}>
         <View style={{ flex: 1 }}>
-          <Tree />
+          <Tree
+            numberOfBalls={ballOrnamentsAmount}
+            ballOrnamentsColor={ballOrnamentsColor}
+            numberOfStars={starsAmount}
+            starsColor={starsColor}
+            numberOfLights={lightsAmount}
+          />
         </View>
-        <Controls onChange={onChange}/>
+        <Controls
+          onChange={onChange}
+        />
       </View>
     </ImageBackground>
   );

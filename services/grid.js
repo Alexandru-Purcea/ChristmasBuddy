@@ -9,20 +9,24 @@ const H = "half-grid";
 const G = "full-grid";
 
 class Cell {
-  constructor({ x, y, isOccupied }) {
+  constructor({ x, y, isOccupied, isEnabled, type }) {
     this.isOccupied = isOccupied;
+    this.isEnabled = isEnabled;
+    this.type = type;
     this.x = x;
     this.y = y;
     this.element = null;
   }
 
-  markOccupied(element) {
+  markOccupied(element, type) {
     this.isOccupied = true;
+    this.type = type;
     element && (this.element = element);
   }
 
   clean() {
     this.isOccupied = false;
+    this.type = "";
     this.element = null;
   }
 
@@ -37,28 +41,28 @@ class Cell {
 
 class BackgroundCell extends Cell {
   constructor(x, y) {
-    super({ isOccupied: true, x: x, y: y });
+    super({ isEnabled: false, isOccupied: true, x: x, y: y });
   }
 }
 
 class GridCell extends Cell {
   constructor(x, y) {
-    super({ isOccupied: false, x: x, y: y });
+    super({ isEnabled: true, isOccupied: false, x: x, y: y });
   }
 }
 
 // the game map
 const myGrid = [
   [B, B, B, B, G, B, B, B, B],
+  [B, B, B, G, G, B, B, B, B],
   [B, B, B, G, G, G, B, B, B],
-  [B, B, B, G, G, G, B, B, B],
+  [B, B, G, G, G, G, B, B, B],
   [B, B, G, G, G, G, G, B, B],
+  [B, B, G, G, G, G, B, B, B],
   [B, B, G, G, G, G, G, B, B],
-  [B, B, G, G, G, G, G, B, B],
+  [B, G, G, G, G, G, G, B, B],
   [B, G, G, G, G, G, G, G, B],
-  [B, B, G, G, G, G, G, B, B],
-  [G, G, G, G, G, G, G, G, G],
-  [G, G, G, G, G, G, G, G, G],
+  [G, G, G, G, G, G, G, G, B],
 ];
 
 class Grid {
@@ -89,7 +93,7 @@ class Grid {
   }
 
   clean() {
-    this.occupiedCells.forEach(cell => cell.clean());
+    this.occupiedCells.forEach((cell) => cell.clean());
     this.occupiedCells.splice(0);
   }
 
@@ -114,15 +118,31 @@ class Grid {
     const unoccupiedGrid = this.grid.filter((cell) => !cell.isOccupied);
     const unoccupiedCell = unoccupiedGrid[Math.floor(Math.random() * unoccupiedGrid.length)];
     if (unoccupiedGrid.length === 0) {
-      throw new Error(
-        "Gata cu impodobitul bradului, nu mai este nici un loc liber"
-      );
+      return null;
     } else if (unoccupiedGrid.length / this.grid.length < 30 && !this.isAllAlone(unoccupiedCell)) {
       return this.nextRandomFreeCell;
     } else {
       this.occupiedCells.push(unoccupiedCell);
       return unoccupiedCell;
     }
+  }
+
+  get occupiedCellWithType() {
+    return (type) => {
+      const occupiedGridWithType = this.grid.filter(
+        (cell) => cell.type === type && cell.isEnabled
+      );
+
+      if(!this.occupiedCellWithType) {
+        return null;
+      }
+
+      const occupiedCell =
+        occupiedGridWithType[
+          Math.floor(Math.random() * occupiedGridWithType.length)
+        ];
+      return occupiedCell;
+    };
   }
 }
 
