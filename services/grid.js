@@ -9,8 +9,9 @@ const H = "half-grid";
 const G = "full-grid";
 
 class Cell {
-  constructor({ x, y, isOccupied, type }) {
+  constructor({ x, y, isOccupied, isEnabled, type }) {
     this.isOccupied = isOccupied;
+    this.isEnabled = isEnabled;
     this.type = type;
     this.x = x;
     this.y = y;
@@ -40,13 +41,13 @@ class Cell {
 
 class BackgroundCell extends Cell {
   constructor(x, y) {
-    super({ isOccupied: true, x: x, y: y });
+    super({ isEnabled: false, isOccupied: true, x: x, y: y });
   }
 }
 
 class GridCell extends Cell {
   constructor(x, y) {
-    super({ isOccupied: false, x: x, y: y });
+    super({ isEnabled: true, isOccupied: false, x: x, y: y });
   }
 }
 
@@ -118,7 +119,7 @@ class Grid {
   get occupiedCellWithType() {
     return (type) => {
       const occupiedGridWithType = this.grid.filter(
-        (cell) => cell.type === type
+        (cell) => cell.type === type && cell.isEnabled
       );
 
       if(!this.occupiedCellWithType) {

@@ -8,6 +8,7 @@ interface ControlsProps {
 }
 
 const MAX_ITEMS = 45;
+const MAX_LIGHTS = 86;
 
 export const Controls: React.FC<ControlsProps> = ({
   onChange,
@@ -123,7 +124,7 @@ export const Controls: React.FC<ControlsProps> = ({
               onChange("lightsAmount", Math.round(value))
             }
             minimumValue={0}
-            maximumValue={MAX_ITEMS}
+            maximumValue={MAX_LIGHTS}
           />
         </View>
       </View>

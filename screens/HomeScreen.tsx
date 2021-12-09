@@ -32,7 +32,7 @@ export default function HomeScreen({
         break;
       }
       case "lightsAmount": {
-        setStarsAmount(value);
+        setLightsAmount(value);
         break;
       }
       case "starsColor": {
@@ -59,6 +59,7 @@ export default function HomeScreen({
             ballOrnamentsColor={ballOrnamentsColor}
             numberOfStars={starsAmount}
             starsColor={starsColor}
+            numberOfLights={lightsAmount}
           />
         </View>
         <Controls
