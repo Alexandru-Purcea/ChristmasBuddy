@@ -13,14 +13,12 @@ export default () => {
   let engine = Matter.Engine.create({ enableSleeping: false });
   let world = engine.world;
 
-  engine.gravity.y = 0.4;
+  engine.gravity.y = 0.5;
 
   const obstacles = {};
   const colors = ["red", "yellow", "pink"];
 
-  for (let index = 0; index < 10; index++) {
-    const width = getRandom(40, 121);
-    const ratio = 121 / 80;
+  for (let index = 0; index < 25; index++) {
     obstacles[`WrappedPresent${index}`] = WrappedPresent(
       world,
       `WrappedPresent${index}`,
@@ -30,10 +28,10 @@ export default () => {
         y: getRandom(-screenHeight * 2, -screenHeight / 2),
       },
       {
-        width: width,
-        height: width * ratio,
+        width: 90,
+        height: 90,
         friction: 0.7,
-        restitution: 0.3,
+        restitution: 0.5,
       }
     );
   }
