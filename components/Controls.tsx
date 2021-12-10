@@ -60,8 +60,8 @@ export const Controls: React.FC<ControlsProps> = ({
                 value: "#BFBDB7",
               },
               {
-                image: require("../assets/images/star-black.png"),
-                value: "#0C0C0C",
+                image: require("../assets/images/star-white.png"),
+                value: "#FFFFFF",
               },
             ]}
             onChange={(value) => onChange("starsColor", value)}
@@ -105,8 +105,8 @@ export const Controls: React.FC<ControlsProps> = ({
                 value: "#BFBDB7",
               },
               {
-                image: require("../assets/images/tree-ball-black.png"),
-                value: "#0C0C0C",
+                image: require("../assets/images/tree-ball-white.png"),
+                value: "#FFFFFF",
               },
             ]}
             onChange={(value) => onChange("ballOrnamentsColor", value)}
@@ -134,7 +134,7 @@ export const Controls: React.FC<ControlsProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    width: "35%",
+    width: 400,
     alignItems: "center",
     justifyContent: "space-between",
     backgroundColor: "rgba(255, 255, 255, 0.77)",

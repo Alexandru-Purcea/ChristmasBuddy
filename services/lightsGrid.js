@@ -129,8 +129,6 @@ class Grid {
     const unoccupiedCell =
       unoccupiedGrid[Math.floor(Math.random() * unoccupiedGrid.length)];
 
-    console.log(availableGrid.length / unoccupiedGrid.length);
-
     if (unoccupiedGrid.length === 0) {
       return null;
     } else if (
