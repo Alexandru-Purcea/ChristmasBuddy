@@ -130,8 +130,6 @@ class Grid {
     const unoccupiedCell =
       unoccupiedGrid[Math.floor(Math.random() * unoccupiedGrid.length)];
 
-    console.log(availableGrid.length / unoccupiedGrid.length);
-
     if (unoccupiedGrid.length === 0) {
       return null;
     } else if (
@@ -170,11 +168,5 @@ class Grid {
 }
 
 const TreeGrid = new Grid(myGrid);
-
-// for (let index = 0; index < 90; index++) {
-//   const nextCell = treeGrid.nextRandomFreeCell;
-//   nextCell.markOccupied();
-//   console.log(`Celula ${nextCell.x}/${nextCell.y} este acum ocupata`);
-// }
 
 export default TreeGrid;

@@ -1,6 +1,6 @@
 import Matter from "matter-js";
 
-const Physics = (entities, { touches, time, dispatch }) => {
+const Physics = (entities, { touches, time }) => {
   let engine = entities.physics.engine;
 
   touches

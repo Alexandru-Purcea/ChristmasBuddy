@@ -18,12 +18,15 @@ export default function HomeScreen({
   const [ballOrnamentsColor, setBallOrnamentsColor] = useState("#F5CA4F");
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
+  const [isSnowing, setIsSnowing] = React.useState(false);
+
   const displaySanta = () => {
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 300,
       useNativeDriver: true,
     }).start();
+    setIsSnowing(true);
   };
 
   const hideSanta = () => {
@@ -32,6 +35,7 @@ export default function HomeScreen({
       duration: 300,
       useNativeDriver: true,
     }).start();
+    setIsSnowing(false);
   };
 
   const onChange = (field: string, value: string | number) => {
@@ -59,26 +63,14 @@ export default function HomeScreen({
     }
   };
 
-  const [isSnowing, setIsSnowing] = React.useState(false);
-  const makeItSnow = () => {
-    setIsSnowing(true);
-  };
   return (
     <ImageBackground
       source={backgroundImage}
       resizeMode="cover"
       style={styles.image}
     >
-      <View style={styles.container} onTouchStart={makeItSnow}>
+      <View style={styles.container}>
         <View style={{ flex: 1 }}>
-          <Animated.View style={{ ...styles.santa, opacity: fadeAnim }}>
-            <LottieView
-              source={require("../assets/images/merryChristmas")}
-              style={styles.santa}
-              autoPlay
-              loop={true}
-            />
-          </Animated.View>
           <Tree
             numberOfBalls={ballOrnamentsAmount}
             displaySanta={displaySanta}
@@ -89,6 +81,14 @@ export default function HomeScreen({
             numberOfLights={lightsAmount}
           />
           <Presents isRunning={isSnowing} />
+          <Animated.View style={{ ...styles.santa, opacity: fadeAnim }}>
+            <LottieView
+              source={require("../assets/images/merryChristmas")}
+              style={styles.santa}
+              autoPlay
+              loop={true}
+            />
+          </Animated.View>
         </View>
         <Controls onChange={onChange} />
       </View>

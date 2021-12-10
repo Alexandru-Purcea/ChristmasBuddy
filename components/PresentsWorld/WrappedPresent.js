@@ -54,7 +54,7 @@ export default (world, label, color, pos, size) => {
     { label: label, angle: 0 }
   );
 
-  Matter.World.add(world, initialWrappedPresent);
+  Matter.World.add(world, [initialWrappedPresent]);
 
   return {
     body: initialWrappedPresent,

@@ -26,7 +26,7 @@ export default () => {
       `WrappedPresent${index}`,
       "transparent",
       {
-        x: getRandom(screenWidth * 0.1, screenWidth * 0.9),
+        x: getRandom((screenWidth - 400) * 0.1, (screenWidth - 400) * 0.9),
         y: getRandom(-screenHeight * 2, -screenHeight / 2),
       },
       {
