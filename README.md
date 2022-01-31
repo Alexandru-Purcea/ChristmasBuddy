@@ -1,4 +1,4 @@
-## Important: the app is intended to be run on tablets
+### Important: the app is intended to be run on tablets, use landscape mode for the best user experience
 
 ## Table of Contents
 
